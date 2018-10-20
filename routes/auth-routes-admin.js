@@ -11,12 +11,12 @@ module.exports = server => {
     })
   );
 
-  server.get('/api/current_user', (req, res) => {
+  server.get('/admin/logout', (req, res) => {
+    req.logout();
     res.send(req.user);
   });
 
-  server.get('/admin/logout', (req, res) => {
-    req.logout();
+  server.get('/api/current_admin', (req, res) => {
     res.send(req.user);
   });
 };

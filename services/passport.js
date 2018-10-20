@@ -1,14 +1,14 @@
 const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
-const User = mongoose.model('user');
+const Admin = mongoose.model('admin');
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
-  User.findById(id).then((user, err) => {
+  Admin.findById(id).then((user, err) => {
     if (err) {
       return done(err);
     }
@@ -18,7 +18,7 @@ passport.deserializeUser((id, done) => {
 
 passport.use(
   new Strategy((username, password, done) => {
-    User.findOne({ username: username }, (err, user) => {
+    Admin.findOne({ username: username }, (err, user) => {
       if (err) return done(err);
 
       if (!user) {
