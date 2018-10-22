@@ -11,9 +11,10 @@
   "description": "EthLounge API",
   "dependencies": {
     "bcrypt": "^3.0.2",
-    "connect-flash": "^0.1.1",
     "cookie-session": "^2.0.0-beta.3",
+    "cors": "^2.8.4",
     "express": "^4.16.4",
+    "express-fileupload": "^1.0.0",
     "mongoose": "^5.3.4",
     "mongoose-auto-increment": "^5.0.1",
     "nodemon": "^1.18.4",

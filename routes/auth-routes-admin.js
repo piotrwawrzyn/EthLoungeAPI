@@ -4,9 +4,9 @@ module.exports = server => {
   server.post(
     '/admin/login',
     passport.authenticate('local', {
-      successRedirect: '/',
+      successRedirect: '/admin/dashboard',
       failureRedirect: '/error',
-      failureFlash: true,
+      failureFlash: false,
       passReqToCallback: true
     })
   );

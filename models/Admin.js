@@ -24,7 +24,10 @@ const { initUsername, initPassword } = keys;
 
 Admin.findOne({ username: initUsername }, async (err, user) => {
   if (!user) {
-    const initial_user = new Admin({ username: initUsername });
+    const initial_user = new Admin({
+      username: initUsername,
+      firstName: initUsername
+    });
     initial_user.password = await initial_user.generateHash(initPassword);
     initial_user.save();
   }
