@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Team = mongoose.model('team');
+const fs = require('fs');
 
 module.exports = server => {
   const signedIn = (req, res, next) => {
@@ -12,7 +13,6 @@ module.exports = server => {
 
   server.get('/api/teams', signedIn, async (req, res) => {
     const teams = await Team.find({});
-    console.log(teams);
     res.send(teams);
   });
 
@@ -32,5 +32,27 @@ module.exports = server => {
 
       res.send({ success: success });
     });
+  });
+
+  server.post('/backend/update_team', signedIn, (req, res) => {
+    let logo = req.files ? req.files.logo : '';
+    let displayName = req.body.displayName;
+    let id = req.body.id;
+
+    Team.findById({ _id: id }, async (err, team) => {
+      if (err) res.send(err);
+      if (logo) logo.mv(`${root}/public/img/teams/${id}.png`);
+      team.displayName = displayName;
+      team.save();
+
+      res.send();
+    });
+  });
+
+  server.post('/backend/delete_team', signedIn, (req, res) => {
+    const { id } = req.body;
+    Team.deleteOne({ _id: id }).exec();
+    fs.unlink(`${root}/public/img/teams/${id}.png`);
+    res.send();
   });
 };
