@@ -3,7 +3,7 @@ const Team = mongoose.model('team');
 
 module.exports = server => {
   const signedIn = (req, res, next) => {
-    if (req.user) {
+    if (req.isAuthenticated()) {
       next();
     } else {
       res.redirect('/404');

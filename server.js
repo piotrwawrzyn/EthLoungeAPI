@@ -32,6 +32,7 @@ server.use(passport.initialize());
 server.use(passport.session());
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
+server.use(express.static('public'));
 
 mongoose.connect(keys.mongoDbURI);
 autoIncrement.initialize(mongoose.connection);
