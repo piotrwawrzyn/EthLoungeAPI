@@ -34,7 +34,7 @@ module.exports = server => {
   });
 
   server.get('/logout', (req, res) => {
-    req.session = null;
-    res.end(req.session);
+    req.session.current_gambler = null;
+    res.end(null);
   });
 };

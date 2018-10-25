@@ -17,8 +17,11 @@ const bodyParser = require('body-parser');
 const autoIncrement = require('mongoose-auto-increment');
 
 const server = express();
-
-server.use(cors());
+const corsOptions = {
+  origin: keys.corsAllow,
+  optionsSuccessStatus: 200
+};
+server.use(cors(corsOptions));
 server.use(fileUpload());
 
 server.use(
