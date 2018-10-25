@@ -1,4 +1,5 @@
 /node_modules
 dev.js
-
+teams/*
+!teams/.gitkeep
 
