@@ -1,30 +1,36 @@
 const mongoose = require('mongoose');
 const Team = mongoose.model('team');
 const fs = require('fs');
+const SaveImage = require('../../utils/SaveImage');
+const signedIn = require('../middleware/signedIn');
+const DeleteImage = require('../../utils/DeleteImage');
 
 module.exports = server => {
-  const signedIn = (req, res, next) => {
-    if (req.isAuthenticated()) {
-      next();
-    } else {
-      res.redirect('/404');
-    }
-  };
+  server.get('/api/teams', async (req, res) => {
+    if (req.query.apiID) {
+      const apiID = req.query.apiID;
+      Team.findOne({ apiID }, (err, team) => {
+        if (err) res.send(err);
+        if (!team) res.send({ team: null });
+        else res.send(team);
+      });
 
-  server.get('/api/teams', signedIn, async (req, res) => {
+      return;
+    }
+
     const teams = await Team.find({});
     res.send(teams);
   });
 
-  server.post('/backend/new_team', signedIn, (req, res) => {
-    let logo = req.files.logo;
-    let displayName = req.body.displayName;
+  server.post('/backend/new_team', (req, res) => {
+    let logo = req.files ? req.files.logo : req.body.logo;
+    const { displayName } = req.body;
     let success = false;
 
     Team.findOne({ displayName: displayName }, async (err, team) => {
       if (!team) {
         const new_team = await new Team({ displayName }).save();
-        logo.mv(`${root}/public/img/teams/${new_team.id}.png`);
+        SaveImage(logo, `teams/${new_team._id}`);
         success = true;
       }
 
@@ -34,10 +40,9 @@ module.exports = server => {
     });
   });
 
-  server.post('/backend/update_team', signedIn, (req, res) => {
+  server.post('/backend/update_team', (req, res) => {
     let logo = req.files ? req.files.logo : '';
-    let displayName = req.body.displayName;
-    let id = req.body.id;
+    const { displayName, id } = req.body;
 
     Team.findById({ _id: id }, async (err, team) => {
       if (err) res.send(err);
@@ -49,10 +54,12 @@ module.exports = server => {
     });
   });
 
-  server.post('/backend/delete_team', signedIn, (req, res) => {
+  server.post('/backend/delete_team', (req, res) => {
     const { id } = req.body;
     Team.deleteOne({ _id: id }).exec();
-    fs.unlink(`${root}/public/img/teams/${id}.png`);
+
+    DeleteImage(`teams/${id}.png`);
+
     res.send();
   });
 };

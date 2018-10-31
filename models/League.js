@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const { plugin } = require('mongoose-auto-increment');
 
-const teamSchema = new Schema({
+const leagueSchema = new Schema({
   displayName: String,
   pandaID: String
 });
 
-teamSchema.plugin(plugin, 'team');
-mongoose.model('team', teamSchema);
+leagueSchema.plugin(plugin, 'league');
+mongoose.model('league', leagueSchema);

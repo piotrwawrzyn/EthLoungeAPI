@@ -3,9 +3,9 @@ const { Schema } = mongoose;
 const { plugin } = require('mongoose-auto-increment');
 
 const matchSchema = new Schema({
-  displayName: String,
-  teamsID: [Number],
-  startTime: Date
+  teamsID: [String],
+  startTime: Date,
+  pandaID: String
 });
 
 matchSchema.plugin(plugin, 'match');
