@@ -7,12 +7,12 @@ const DeleteImage = require('../../utils/DeleteImage');
 
 module.exports = server => {
   server.get('/api/teams', async (req, res) => {
-    if (req.query.apiID) {
-      const apiID = req.query.apiID;
-      Team.findOne({ apiID }, (err, team) => {
+    if (req.query.pandaID) {
+      const pandaID = req.query.pandaID;
+      Team.findOne({ pandaID }, (err, team) => {
         if (err) res.send(err);
         if (!team) res.send({ team: null });
-        else res.send(team);
+        else res.send({ team });
       });
 
       return;
@@ -24,19 +24,16 @@ module.exports = server => {
 
   server.post('/backend/new_team', (req, res) => {
     let logo = req.files ? req.files.logo : req.body.logo;
-    const { displayName } = req.body;
-    let success = false;
+    const { displayName, pandaID } = req.body;
+    let new_team;
 
-    Team.findOne({ displayName: displayName }, async (err, team) => {
+    Team.findOne({ displayName }, async (err, team) => {
       if (!team) {
-        const new_team = await new Team({ displayName }).save();
+        new_team = await new Team({ displayName, pandaID }).save();
         SaveImage(logo, `teams/${new_team._id}`);
-        success = true;
       }
 
-      if (err) success = false;
-
-      res.send({ success: success });
+      res.send({ team: new_team });
     });
   });
 
@@ -47,7 +44,7 @@ module.exports = server => {
     Team.findById({ _id: id }, async (err, team) => {
       if (err) res.send(err);
       if (logo) logo.mv(`${root}/public/img/teams/${id}.png`);
-      team.displayName = displayName;
+      team.displayName = displayName ? displayName : team.displayName;
       team.save();
 
       res.send();

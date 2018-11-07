@@ -4,18 +4,19 @@ const mongoose = require('mongoose');
 const User = mongoose.model('user');
 
 passport.serializeUser((user, done) => {
+  console.log(user);
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-  User.findById(id).then((user, err) => {
+passport.deserializeUser((idToDeserialize, done) => {
+  User.findById(idToDeserialize).then((user, err) => {
     if (err) {
       return done(err);
     }
 
-    const { id, username, permissions, balances } = user;
+    const { _id, username, permissions, balances } = user;
 
-    done(null, { id, username, balances, permissions });
+    done(null, { id: _id, username, balances, permissions });
   });
 });
 

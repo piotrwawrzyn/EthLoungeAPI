@@ -9,15 +9,13 @@ const userSchema = new Schema({
   password: String,
   balances: [
     {
-      symbol: String,
+      id: Number,
       balance: String,
       _id: false
     }
   ],
-  bets: {
-    active: [String],
-    historical: [String]
-  },
+  bets: [],
+
   permissions: [String]
 });
 
@@ -40,8 +38,8 @@ User.findOne({ username: initUsername }, async (err, user) => {
       username: initUsername,
       permissions: ['admin'],
       balances: [
-        { symbol: 'ETH', balance: '100000' },
-        { symbol: 'POWR', balance: '1000' }
+        { id: 0, balance: '100000000000' },
+        { id: 1, balance: '1000000000000000' }
       ]
     });
     initial_user.password = await initial_user.generateHash(initPassword);

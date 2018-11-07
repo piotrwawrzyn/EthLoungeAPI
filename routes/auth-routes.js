@@ -17,7 +17,6 @@ module.exports = server => {
 
   server.post('/register', (req, res) => {
     const { username, password } = req.body;
-    console.log(username);
     User.findOne({ username }, async (err, user) => {
       if (err) return res(err);
       if (!user) {

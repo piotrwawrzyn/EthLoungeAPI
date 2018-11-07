@@ -14,23 +14,20 @@ module.exports = server => {
     let logo = req.files.logo;
     const { displayName, symbol, address, decimals } = req.body;
 
-    let success = false;
+    let new_token;
 
     Token.findOne({ address: address }, async (err, token) => {
       if (!token) {
-        const new_token = await new Token({
+        new_token = await new Token({
           displayName,
           symbol,
           address,
           decimals
         }).save();
         logo.mv(`${root}/public/img/tokens/${new_token.symbol}.png`);
-        success = true;
       }
 
-      if (err) success = false;
-
-      res.send({ success: success });
+      res.send({ token: new_token });
     });
   });
 

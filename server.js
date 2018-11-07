@@ -13,6 +13,7 @@ const corsOptions = {
 };
 const port = process.env.PORT || 5000;
 const path = require('path');
+const helmet = require('helmet');
 const server = express();
 
 // Setup
@@ -34,6 +35,7 @@ require('./models/Bet');
 require('./services/passport');
 
 // Middleware
+server.use(helmet());
 server.use(cors(corsOptions));
 server.use(fileUpload());
 server.use(
@@ -43,19 +45,21 @@ server.use(
   })
 );
 
-server.use(passport.initialize());
-server.use(passport.session());
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 server.use(express.static('public'));
+server.use(passport.initialize());
+server.use(passport.session());
 
 // Routes
 require('./routes/auth-routes')(server);
 require('./routes/model-routes/team-routes')(server);
 require('./routes/model-routes/league-routes')(server);
+require('./routes/model-routes/match-routes')(server);
 require('./routes/external-api/panda-score-api')(server);
 require('./routes/model-routes/token-routes')(server);
 require('./routes/page-routes/match-routes')(server);
+require('./routes/user-action-routes/bet-routes')(server);
 
 mongoose.connect(keys.mongoDbURI);
 

@@ -3,17 +3,26 @@ const { Schema } = mongoose;
 const { plugin } = require('mongoose-auto-increment');
 
 const betSchema = new Schema({
-  matchID: String,
-  betMakerID: String,
-  tokensBet: {
-    symbol: String,
-    balance: String
-  },
-  tokensWon: {
-    symbol: String,
-    balance: String
-  },
-  result: String
+  matchID: Number,
+  teamID: Number,
+  betMakerID: Number,
+  estimatedBetValue: Number,
+  estimatedRewardValue: { type: Number, default: 0 },
+  tokensBet: [
+    {
+      id: Number,
+      amount: String,
+      _id: false
+    }
+  ],
+  tokensWon: [
+    {
+      id: Number,
+      amount: String,
+      _id: false
+    }
+  ],
+  state: { type: String, default: 'pending' }
 });
 
 betSchema.plugin(plugin, 'bet');
