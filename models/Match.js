@@ -8,7 +8,8 @@ const matchSchema = new Schema({
     {
       id: Number,
       totalDollarsBet: { type: Number, default: 0 },
-      odds: { type: Number, default: (2 * FEE_MULTIPLIER).toFixed(2) }, // change this to some constant
+      odds: { type: Number, default: (2 * FEE_MULTIPLIER).toFixed(2) },
+      percentages: { type: Number, default: 50 },
       _id: false
     }
   ],
@@ -18,7 +19,8 @@ const matchSchema = new Schema({
   highestBet: { type: Number, default: 0 },
   league: Number,
   startTime: Date,
-  pandaID: String
+  pandaID: String,
+  serie: String
 });
 
 matchSchema.plugin(plugin, 'match');

@@ -22,7 +22,7 @@ module.exports = server => {
   });
 
   server.post('/backend/new_match', async (req, res) => {
-    const { teams, league, startTime, pandaID } = req.body;
+    const { teams, league, startTime, pandaID, serie } = req.body;
 
     Match.findOne({ startTime: startTime }, async (err, match) => {
       if (err) res.send(err);
@@ -34,7 +34,8 @@ module.exports = server => {
           teams,
           league,
           startTime,
-          pandaID
+          pandaID,
+          serie
         }).save();
 
         res.send({ match: new_match });

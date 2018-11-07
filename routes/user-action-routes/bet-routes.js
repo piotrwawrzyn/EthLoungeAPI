@@ -8,6 +8,7 @@ const UserAlreadyBet = require('../../utils/bet/UserAlreadyBet');
 const UpdateMatchWithBet = require('../../utils/bet/UpdateMatchWithBet');
 const EstimateBetValue = require('../../utils/bet/EstimateBetValue');
 const PricesMap = require('../../utils/PricesMap');
+const RemoveEmptyBalances = require('../../utils/RemoveEmptyBalances');
 
 // Deposit, Withdraw, Placebet
 
@@ -40,7 +41,7 @@ module.exports = server => {
       }).save();
 
       await UpdateMatchWithBet(matchID, bet, supportedTokens, pricesMap);
-      user.bets.push(bet._id);
+      await RemoveEmptyBalances(user);
       await user.save();
 
       res.send({ bet });
