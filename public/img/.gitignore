@@ -1,0 +1,6 @@
+teams/*
+!teams/.gitkeep
+tokens/*
+!tokens/.gitkeep
+leagues/*
+!leagues/.gitkeep
