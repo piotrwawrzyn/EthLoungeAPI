@@ -7,7 +7,6 @@ const betSchema = new Schema({
   teamID: Number,
   betMakerID: Number,
   estimatedBetValue: Number,
-  estimatedRewardValue: { type: Number, default: 0 },
   tokensBet: [
     {
       id: Number,

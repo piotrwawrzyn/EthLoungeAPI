@@ -4,6 +4,7 @@ const fs = require('fs');
 const SaveImage = require('../../utils/SaveImage');
 const signedIn = require('../middleware/signedIn');
 const DeleteImage = require('../../utils/DeleteImage');
+const IMAGE_FOLDER_PATH = 'teams';
 
 module.exports = server => {
   server.get('/api/teams', async (req, res) => {
@@ -24,13 +25,20 @@ module.exports = server => {
 
   server.post('/backend/new_team', (req, res) => {
     let logo = req.files ? req.files.logo : req.body.logo;
-    const { displayName, pandaID } = req.body;
+    let { displayName, pandaID } = req.body;
+    if (pandaID === 'undefined') pandaID = undefined;
     let new_team;
 
     Team.findOne({ displayName }, async (err, team) => {
       if (!team) {
         new_team = await new Team({ displayName, pandaID }).save();
-        SaveImage(logo, `teams/${new_team._id}`);
+        const { _id } = new_team;
+        new_team.logo = await SaveImage(
+          logo,
+          IMAGE_FOLDER_PATH,
+          `${_id}_${displayName}`
+        );
+        new_team.save();
       }
 
       res.send({ team: new_team });
@@ -43,8 +51,17 @@ module.exports = server => {
 
     Team.findById({ _id: id }, async (err, team) => {
       if (err) res.send(err);
-      if (logo) logo.mv(`${root}/public/img/teams/${id}.png`);
       team.displayName = displayName ? displayName : team.displayName;
+
+      if (logo) {
+        await DeleteImage(team.logo);
+        team.logo = await SaveImage(
+          logo,
+          IMAGE_FOLDER_PATH,
+          `${id}_${team.displayName}`
+        );
+      }
+
       team.save();
 
       res.send();
@@ -53,9 +70,10 @@ module.exports = server => {
 
   server.post('/backend/delete_team', (req, res) => {
     const { id } = req.body;
-    Team.deleteOne({ _id: id }).exec();
-
-    DeleteImage(`teams/${id}.png`);
+    Team.findByIdAndDelete(id, async (err, team) => {
+      const { logo } = team;
+      await DeleteImage(logo);
+    });
 
     res.send();
   });

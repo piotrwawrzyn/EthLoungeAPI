@@ -11,7 +11,7 @@ const CalculateOdds = require('./CalculateOdds');
 module.exports = async (matchID, userBet, supportedTokens, pricesMap) => {
   const match = await Match.findById(matchID).exec();
   let bets = await Bet.find({ _id: { $in: match.bets } }).exec();
-  console.log(match, bets);
+
   //Push bet localy
   bets.push(userBet);
 

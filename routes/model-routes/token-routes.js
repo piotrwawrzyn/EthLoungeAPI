@@ -3,6 +3,8 @@ const Token = mongoose.model('token');
 const fs = require('fs');
 const signedIn = require('../middleware/signedIn');
 const DeleteImage = require('../../utils/DeleteImage');
+const SaveImage = require('../../utils/SaveImage');
+const IMAGE_FOLDER_PATH = 'tokens';
 
 module.exports = server => {
   server.get('/api/tokens', async (req, res) => {
@@ -24,7 +26,12 @@ module.exports = server => {
           address,
           decimals
         }).save();
-        logo.mv(`${root}/public/img/tokens/${new_token.symbol}.png`);
+        const { _id } = new_token;
+        const logo = await SaveImage(
+          logo,
+          IMAGE_FOLDER_PATH,
+          `${_id}_${displayName}`
+        );
       }
 
       res.send({ token: new_token });
@@ -37,10 +44,19 @@ module.exports = server => {
 
     Token.findById({ _id: id }, async (err, token) => {
       if (err) res.send(err);
-      if (logo) logo.mv(`${root}/public/img/tokens/${id}.png`);
-      token.displayName = displayName;
-      token.symbol = symbol;
-      token.decimals = decimals;
+      token.displayName = displayName ? displayName : token.displayName;
+      token.symbol = symbol ? symbol : token.symbol;
+      token.decimals = decimals ? decimals : token.decimals;
+
+      if (logo) {
+        await DeleteImage(token.logo);
+        token.logo = await SaveImage(
+          logo,
+          IMAGE_FOLDER_PATH,
+          `${id}_${token.displayName}`
+        );
+      }
+
       token.save();
 
       res.send();
@@ -49,8 +65,10 @@ module.exports = server => {
 
   server.post('/backend/delete_token', (req, res) => {
     const { id } = req.body;
-    Token.deleteOne({ _id: id }).exec();
-    DeleteImage(`tokens/${id}.png`);
+    Token.findByIdAndDelete(id, async (err, token) => {
+      const { logo } = token;
+      await DeleteImage(logo);
+    });
 
     res.send();
   });

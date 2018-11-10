@@ -4,7 +4,8 @@ const { plugin } = require('mongoose-auto-increment');
 
 const teamSchema = new Schema({
   displayName: String,
-  pandaID: Number
+  pandaID: Number,
+  logo: String
 });
 
 teamSchema.plugin(plugin, 'team');

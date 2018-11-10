@@ -6,7 +6,11 @@ const tokenSchema = new Schema({
   displayName: String,
   symbol: String,
   address: String,
-  decimals: Number
+  decimals: Number,
+  logo: String,
+  price: {
+    USD: String
+  }
 });
 
 tokenSchema.plugin(plugin, 'token');
@@ -27,7 +31,6 @@ const addInitialSupportedToken = (displayName, symbol, address, decimals) => {
   });
 };
 
-// This entries should match with Smart Contract's constructor
 addInitialSupportedToken(
   'Ethereum',
   'ETH',
@@ -37,6 +40,18 @@ addInitialSupportedToken(
 addInitialSupportedToken(
   'Power Ledger',
   'POWR',
+  '0x8f0C267ef144D319CcF1d724c222a59A50CD7B43',
+  6
+);
+addInitialSupportedToken(
+  'Metal',
+  'MTL',
   '0x7f0C267ef144D319CcF1d724c222a59A50CD7B43',
   8
+);
+addInitialSupportedToken(
+  'Basic Attention Token',
+  'BAT',
+  '0x9f0C267ef144D319CcF1d724c222a59A50CD7B43',
+  18
 );

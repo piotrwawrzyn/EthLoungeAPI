@@ -20,9 +20,6 @@ const server = express();
 autoIncrement.initialize(mongoose.connection);
 global.root = path.resolve(__dirname);
 
-// Ethereum Events
-require('./event_listeners/NewBet');
-
 // Models
 require('./models/User');
 require('./models/Team');
@@ -62,6 +59,9 @@ require('./routes/page-routes/match-routes')(server);
 require('./routes/user-action-routes/bet-routes')(server);
 
 mongoose.connect(keys.mongoDbURI);
+
+// Continous actions
+require('./continous/UpdatePrices');
 
 server.listen(port, err => {
   if (err) throw err;

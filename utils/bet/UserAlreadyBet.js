@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Bet = mongoose.model('bet');
 
 const UserAlreadyBet = async (user, matchID) => {
+  if (!user.bets) return false;
   const { bets } = user;
 
   const betsFromDb = await Bet.find({ _id: { $in: bets } }).exec();
