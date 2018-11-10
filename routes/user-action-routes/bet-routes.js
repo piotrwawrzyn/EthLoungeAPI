@@ -9,18 +9,28 @@ const UpdateMatchWithBet = require('../../utils/bet/UpdateMatchWithBet');
 const EstimateBetValue = require('../../utils/bet/EstimateBetValue');
 const PricesMap = require('../../utils/PricesMap');
 const RemoveEmptyBalances = require('../../utils/RemoveEmptyBalances');
+const _ = require('lodash');
+
+let usersBeingHandled = [];
 
 module.exports = server => {
   server.post('/place_bet', async (req, res) => {
     const { matchID, teamID, betMakerID, tokensBet } = req.body;
-    console.log('betmakerid: ', betMakerID);
+
     let user = await User.findById(betMakerID).exec();
-    console.log('user: ', user);
+
     const alreadyBet = await UserAlreadyBet(user, matchID);
 
-    if (!UserHaveEnoughBalance(user, tokensBet) || alreadyBet) {
+    if (
+      !UserHaveEnoughBalance(user, tokensBet) ||
+      alreadyBet ||
+      usersBeingHandled.includes(betMakerID)
+    ) {
       res.send(null);
     } else {
+      // Lock route for user to prevent double-betting
+      usersBeingHandled.push(betMakerID);
+
       const supportedTokens = await Token.find({});
       const pricesMap = await PricesMap(supportedTokens);
 
@@ -42,10 +52,14 @@ module.exports = server => {
 
       await UpdateMatchWithBet(matchID, bet, supportedTokens, pricesMap);
       await RemoveEmptyBalances(user);
+
       user.bets.push(bet._id);
       await user.save();
 
       res.send({ bet });
+
+      // Unlock route for user
+      usersBeingHandled = _.pull(usersBeingHandled, betMakerID);
     }
   });
 };
