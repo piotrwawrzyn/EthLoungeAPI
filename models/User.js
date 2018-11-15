@@ -15,8 +15,10 @@ const userSchema = new Schema({
     }
   ],
   bets: [],
-
-  permissions: [String]
+  permissions: [String],
+  permalink: String,
+  verificationToken: String,
+  verified: { type: Boolean, default: false }
 });
 
 userSchema.methods.generateHash = password => {
@@ -37,6 +39,7 @@ User.findOne({ username: initUsername }, async (err, user) => {
     const initial_user = new User({
       username: initUsername,
       permissions: ['admin'],
+      verified: true,
       balances: [
         { id: 0, balance: '2000000000' },
         { id: 1, balance: '300000000' },
