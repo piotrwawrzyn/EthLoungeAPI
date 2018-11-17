@@ -5,5 +5,7 @@ module.exports = {
   initPassword: process.env.DB_USER_PASSWORD,
   corsAllow: 'https://ethlounge.herokuapp.com',
   frontEndServer: 'https://ethlounge.com',
-  panda_score_api_key: process.env.PANDA_SCORE_API_KEY
+  panda_score_api_key: process.env.PANDA_SCORE_API_KEY,
+  emailNoResponseLogin: process.env.EMAIL_NORESPONSE_LOGIN,
+  emailNoResponsePassword: process.env.EMAIL_NORESPONSE_PASSWORD
 };
