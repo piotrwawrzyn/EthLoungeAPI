@@ -1,8 +1,7 @@
 const _ = require('lodash');
 const Big = require('big.js');
-const RemoveEmptyBalances = require('./RemoveEmptyBalances');
 
-const ChargeUser = async (user, tokens, save) => {
+const chargeUser = async (user, tokens, save) => {
   const { balances } = user;
   for (token of tokens) {
     const { id, amount } = token;
@@ -14,4 +13,4 @@ const ChargeUser = async (user, tokens, save) => {
   if (save) await user.save();
 };
 
-module.exports = ChargeUser;
+module.exports = chargeUser;

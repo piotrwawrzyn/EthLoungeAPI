@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 const Token = mongoose.model('token');
-const fs = require('fs');
-const signedIn = require('../middleware/signedIn');
-const DeleteImage = require('../../utils/DeleteImage');
-const SaveImage = require('../../utils/SaveImage');
+const deleteImage = require('../../utils/deleteImage');
+const saveImage = require('../../utils/saveImage');
 const IMAGE_FOLDER_PATH = 'tokens';
 
 module.exports = server => {
@@ -27,7 +25,7 @@ module.exports = server => {
           decimals
         }).save();
         const { _id } = new_token;
-        const logo = await SaveImage(
+        const logo = await saveImage(
           logo,
           IMAGE_FOLDER_PATH,
           `${_id}_${displayName}`
@@ -49,8 +47,8 @@ module.exports = server => {
       token.decimals = decimals ? decimals : token.decimals;
 
       if (logo) {
-        await DeleteImage(token.logo);
-        token.logo = await SaveImage(
+        await deleteImage(token.logo);
+        token.logo = await saveImage(
           logo,
           IMAGE_FOLDER_PATH,
           `${id}_${token.displayName}`
@@ -67,7 +65,7 @@ module.exports = server => {
     const { id } = req.body;
     Token.findByIdAndDelete(id, async (err, token) => {
       const { logo } = token;
-      await DeleteImage(logo);
+      await deleteImage(logo);
     });
 
     res.send();

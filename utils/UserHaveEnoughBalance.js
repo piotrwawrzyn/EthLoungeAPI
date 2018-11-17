@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const Big = require('big.js');
 
-const UserHaveEnoughBalance = (user, tokens) => {
+const userHaveEnoughBalance = (user, tokens) => {
   if (!user) return false;
   if (tokens.length === 0) return false;
 
@@ -16,4 +16,4 @@ const UserHaveEnoughBalance = (user, tokens) => {
   return true;
 };
 
-module.exports = UserHaveEnoughBalance;
+module.exports = userHaveEnoughBalance;

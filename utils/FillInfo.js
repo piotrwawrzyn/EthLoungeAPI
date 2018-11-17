@@ -1,7 +1,6 @@
 const _ = require('lodash');
-const mongoose = require('mongoose');
 
-const FillInfo = (items, itemsFromDb) => {
+const fillInfo = (items, itemsFromDb) => {
   if (typeof items === 'number') {
     const itemFromDb = _.find(itemsFromDb, { _id: items });
 
@@ -24,4 +23,4 @@ const FillInfo = (items, itemsFromDb) => {
   return items;
 };
 
-module.exports = FillInfo;
+module.exports = fillInfo;

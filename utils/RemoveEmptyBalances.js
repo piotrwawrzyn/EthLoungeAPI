@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const RemoveEmptyBalances = async (user, save = false) => {
+const removeEmptyBalances = async (user, save = false) => {
   _.remove(user.balances, function(item) {
     const isEmpty = item.balance == 0;
     return item.balance == 0;
@@ -9,4 +9,4 @@ const RemoveEmptyBalances = async (user, save = false) => {
   if (save) await user.save();
 };
 
-module.exports = RemoveEmptyBalances;
+module.exports = removeEmptyBalances;

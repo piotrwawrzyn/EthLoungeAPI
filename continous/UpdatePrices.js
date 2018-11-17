@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Token = mongoose.model('token');
-const PricesMap = require('../utils/PricesMap');
+const PricesMap = require('../utils/pricesMap');
 
 updatePrices = async () => {
   console.log('Updating crypto prices...');

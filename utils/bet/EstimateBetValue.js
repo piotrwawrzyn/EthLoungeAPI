@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const Big = require('big.js');
-const TokenFromWei = require('../TokenFromWei');
+const tokenFromWei = require('../tokenFromWei');
 
 const EstimateBetValue = (tokensBet, supportedTokens, pricesMap) => {
   let estimatedBetValue = Big(0);
@@ -9,7 +9,7 @@ const EstimateBetValue = (tokensBet, supportedTokens, pricesMap) => {
     const { symbol, decimals } = token;
     const price = pricesMap.get(symbol).USD;
 
-    const bigTokenAmount = TokenFromWei(tokensBet[i].amount, decimals);
+    const bigTokenAmount = tokenFromWei(tokensBet[i].amount, decimals);
 
     estimatedBetValue = estimatedBetValue.plus(bigTokenAmount.mul(price));
   }

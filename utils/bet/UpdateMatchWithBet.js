@@ -4,9 +4,9 @@ const Bet = mongoose.model('bet');
 const Token = mongoose.model('token');
 const _ = require('lodash');
 const Big = require('big.js');
-const TokenFromWei = require('../TokenFromWei');
-const CalculatePercentages = require('./CalculatePercentages');
-const CalculateOdds = require('./CalculateOdds');
+const tokenFromWei = require('../tokenFromWei');
+const calculatePercentages = require('./calculatePercentages');
+const calculateOdds = require('./calculateOdds');
 
 module.exports = async (matchID, userBet, supportedTokens, pricesMap) => {
   const match = await Match.findById(matchID).exec();
@@ -40,7 +40,7 @@ module.exports = async (matchID, userBet, supportedTokens, pricesMap) => {
       });
       const { decimals, symbol } = supportedToken;
       const price = pricesMap.get(symbol).USD;
-      const value = TokenFromWei(amount, decimals).mul(price);
+      const value = tokenFromWei(amount, decimals).mul(price);
 
       if (bet.teamID === match.teams[0].id) {
         totalDollarsBet[0] = totalDollarsBet[0].plus(value);
@@ -56,8 +56,8 @@ module.exports = async (matchID, userBet, supportedTokens, pricesMap) => {
 
   totalDollarsBet = totalDollarsBet.map(amount => amount.toFixed(2));
 
-  const percentages = CalculatePercentages(totalDollarsBet);
-  const odds = CalculateOdds(totalDollarsBet);
+  const percentages = calculatePercentages(totalDollarsBet);
+  const odds = calculateOdds(totalDollarsBet);
 
   for (let i = 0; i < 2; i++) {
     match.teams[i].totalDollarsBet = totalDollarsBet[i];

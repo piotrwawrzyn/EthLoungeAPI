@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 const User = mongoose.model('user');
 const Bet = mongoose.model('bet');
 const Token = mongoose.model('token');
-const UserHaveEnoughBalance = require('../../utils/UserHaveEnoughBalance');
-const ChargeUser = require('../../utils/ChargeUser');
-const UserAlreadyBet = require('../../utils/bet/UserAlreadyBet');
-const UpdateMatchWithBet = require('../../utils/bet/UpdateMatchWithBet');
-const EstimateBetValue = require('../../utils/bet/EstimateBetValue');
-const PricesMap = require('../../utils/PricesMap');
-const RemoveEmptyBalances = require('../../utils/RemoveEmptyBalances');
+const userHaveEnoughBalance = require('../../utils/userHaveEnoughBalance');
+const chargeUser = require('../../utils/chargeUser');
+const userAlreadyBet = require('../../utils/bet/userAlreadyBet');
+const updateMatchWithBet = require('../../utils/bet/updateMatchWithBet');
+const estimateBetValue = require('../../utils/bet/estimateBetValue');
+const PricesMap = require('../../utils/pricesMap');
+const removeEmptyBalances = require('../../utils/removeEmptyBalances');
 const _ = require('lodash');
 
 let usersBeingHandled = [];
@@ -19,10 +19,10 @@ module.exports = server => {
 
     let user = await User.findById(betMakerID).exec();
 
-    const alreadyBet = await UserAlreadyBet(user, matchID);
+    const alreadyBet = await userAlreadyBet(user, matchID);
 
     if (
-      !UserHaveEnoughBalance(user, tokensBet) ||
+      !userHaveEnoughBalance(user, tokensBet) ||
       alreadyBet ||
       usersBeingHandled.includes(betMakerID)
     ) {
@@ -34,13 +34,13 @@ module.exports = server => {
       const supportedTokens = await Token.find({});
       const pricesMap = await PricesMap(supportedTokens);
 
-      const estimatedBetValue = await EstimateBetValue(
+      const estimatedBetValue = await estimateBetValue(
         tokensBet,
         supportedTokens,
         pricesMap
       );
 
-      await ChargeUser(user, tokensBet, false);
+      await chargeUser(user, tokensBet, false);
 
       const bet = await new Bet({
         matchID,
@@ -50,8 +50,8 @@ module.exports = server => {
         estimatedBetValue
       }).save();
 
-      await UpdateMatchWithBet(matchID, bet, supportedTokens, pricesMap);
-      await RemoveEmptyBalances(user);
+      await updateMatchWithBet(matchID, bet, supportedTokens, pricesMap);
+      await removeEmptyBalances(user);
 
       user.bets.push(bet._id);
       await user.save();

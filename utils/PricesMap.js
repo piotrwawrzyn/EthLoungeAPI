@@ -2,7 +2,7 @@ const axios = require('axios');
 const mongoose = require('mongoose');
 const Token = mongoose.model('token');
 
-const PricesMap = async tokens => {
+const pricesMap = async tokens => {
   if (!tokens) tokens = await Token.find({});
   const symbols = tokens.map(curr => curr.symbol);
   const response = await axios(
@@ -17,4 +17,4 @@ const PricesMap = async tokens => {
   return pricesMap;
 };
 
-module.exports = PricesMap;
+module.exports = pricesMap;

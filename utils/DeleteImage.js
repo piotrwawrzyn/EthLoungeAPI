@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const DeleteImage = async path => {
+const deleteImage = async path => {
   path = `${root}/public/img/${path}`;
 
   await new Promise((resolve, reject) => {
@@ -13,4 +13,4 @@ const DeleteImage = async path => {
   });
 };
 
-module.exports = DeleteImage;
+module.exports = deleteImage;

@@ -1,9 +1,8 @@
 const _ = require('lodash');
-const Big = require('big.js');
 const mongoose = require('mongoose');
 const Bet = mongoose.model('bet');
 
-const UserAlreadyBet = async (user, matchID) => {
+const userAlreadyBet = async (user, matchID) => {
   if (!user.bets) return false;
   const { bets } = user;
 
@@ -12,5 +11,5 @@ const UserAlreadyBet = async (user, matchID) => {
   if (bet) return true;
   return false;
 };
-
-module.exports = UserAlreadyBet;
+userAlreadyBet;
+module.exports = userAlreadyBet;

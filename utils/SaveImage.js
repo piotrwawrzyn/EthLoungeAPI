@@ -1,13 +1,13 @@
 const axios = require('axios');
 const fs = require('fs');
-const DeleteImage = require('./DeleteImage');
+const deleteImage = require('./deleteImage');
 
-const SaveImage = async (image, path, filename) => {
+const saveImage = async (image, path, filename) => {
   filename = filename.replace(/[/\\?%*:|"<>]/g, '-');
 
   const pathToDb = `${path}/${filename}.png`;
 
-  await DeleteImage(pathToDb);
+  await deleteImage(pathToDb);
 
   path = `${root}/public/img/${pathToDb}`;
 
@@ -21,4 +21,4 @@ const SaveImage = async (image, path, filename) => {
   return pathToDb;
 };
 
-module.exports = SaveImage;
+module.exports = saveImage;

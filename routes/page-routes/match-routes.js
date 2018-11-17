@@ -6,7 +6,7 @@ const Match = mongoose.model('match');
 const Team = mongoose.model('team');
 const League = mongoose.model('league');
 const _ = require('lodash');
-const FillInfo = require('../../utils/FillInfo');
+const fillInfo = require('../../utils/fillInfo');
 
 module.exports = server => {
   server.get('/api/match_info', async (req, res) => {
@@ -74,7 +74,7 @@ module.exports = server => {
         .exec();
       user = { ...user, password: undefined };
       if (user.balances.length > 0)
-        user.balances = FillInfo(user.balances, tokens);
+        user.balances = fillInfo(user.balances, tokens);
 
       const all_bets_by_user = await Bet.find({
         _id: { $in: user.bets }
@@ -85,19 +85,19 @@ module.exports = server => {
       for (let i = 0; i < all_bets_by_user.length; i++) {
         if (all_bets_by_user[i].matchID === matchID) {
           bet = all_bets_by_user[i];
-          bet.tokensBet = FillInfo(bet.tokensBet, tokens);
-          bet.team = FillInfo(bet.teamID, teams);
+          bet.tokensBet = fillInfo(bet.tokensBet, tokens);
+          bet.team = fillInfo(bet.teamID, teams);
           break;
         }
       }
     }
 
     for (lastBet of lastBets) {
-      lastBet.tokensBet = FillInfo(lastBet.tokensBet, tokens);
-      lastBet.team = FillInfo(lastBet.teamID, teams);
+      lastBet.tokensBet = fillInfo(lastBet.tokensBet, tokens);
+      lastBet.team = fillInfo(lastBet.teamID, teams);
     }
 
-    match.teams = FillInfo(match.teams, teams);
+    match.teams = fillInfo(match.teams, teams);
 
     match.league = { ...match.league, ...league };
 

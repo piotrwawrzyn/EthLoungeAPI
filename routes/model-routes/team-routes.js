@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 const Team = mongoose.model('team');
-const fs = require('fs');
-const SaveImage = require('../../utils/SaveImage');
-const signedIn = require('../middleware/signedIn');
-const DeleteImage = require('../../utils/DeleteImage');
+const saveImage = require('../../utils/saveImage');
+const deleteImage = require('../../utils/deleteImage');
 const IMAGE_FOLDER_PATH = 'teams';
 
 module.exports = server => {
@@ -33,7 +31,7 @@ module.exports = server => {
       if (!team) {
         new_team = await new Team({ displayName, pandaID }).save();
         const { _id } = new_team;
-        new_team.logo = await SaveImage(
+        new_team.logo = await saveImage(
           logo,
           IMAGE_FOLDER_PATH,
           `${_id}_${displayName}`
@@ -54,8 +52,8 @@ module.exports = server => {
       team.displayName = displayName ? displayName : team.displayName;
 
       if (logo) {
-        await DeleteImage(team.logo);
-        team.logo = await SaveImage(
+        await deleteImage(team.logo);
+        team.logo = await saveImage(
           logo,
           IMAGE_FOLDER_PATH,
           `${id}_${team.displayName}`
@@ -72,7 +70,7 @@ module.exports = server => {
     const { id } = req.body;
     Team.findByIdAndDelete(id, async (err, team) => {
       const { logo } = team;
-      await DeleteImage(logo);
+      await deleteImage(logo);
     });
 
     res.send();

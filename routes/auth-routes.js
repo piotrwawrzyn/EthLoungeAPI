@@ -1,10 +1,10 @@
 const passport = require('passport');
 const mongoose = require('mongoose');
 const User = mongoose.model('user');
-const setUpReturnTo = require('./middleware/setUpReturnTo');
 const randomstring = require('randomstring');
-const SendVerificationEmail = require('../utils/Emails/SendVerificationEmail');
+const sendEmail = require('../services/nodemailer/sendEmail');
 const keys = require('../config/keys');
+const verificationEmailTemplate = require('../services/nodemailer/templates/verificationEmail');
 
 module.exports = server => {
   server.post('/login', (req, res, next) => {
@@ -50,7 +50,8 @@ module.exports = server => {
 
         new_user.password = await new_user.generateHash(password);
         new_user.email = email;
-        new_user.permalink = username
+
+        const permalink = username
           .toLowerCase()
           .replace(' ', '')
           .replace(/[^\w\s]/gi, '')
@@ -58,9 +59,14 @@ module.exports = server => {
 
         const verificationToken = randomstring.generate(64);
 
+        new_user.permalink = permalink;
         new_user.verificationToken = verificationToken;
 
-        SendVerificationEmail(new_user);
+        sendEmail(
+          new_user.email,
+          'Verify your email to join ethlounge',
+          verificationEmailTemplate(new_user.permalink, verificationToken)
+        );
 
         await new_user.save();
 

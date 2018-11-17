@@ -6,7 +6,7 @@ const getScientificNotation = decimals => {
   return `10e+${number}`;
 };
 
-const TokenFromWei = (amount, decimals) =>
+const tokenFromWei = (amount, decimals) =>
   Big(amount).div(getScientificNotation(decimals));
 
-module.exports = TokenFromWei;
+module.exports = tokenFromWei;

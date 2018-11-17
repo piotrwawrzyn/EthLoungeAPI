@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Match = mongoose.model('match');
-const Team = mongoose.model('team');
 
 module.exports = server => {
   server.get('/backend/matches', async (req, res) => {
