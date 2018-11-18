@@ -1,6 +1,6 @@
 const keys = require('../../../config/keys');
 
-const verificationEmail = (permalink, verificationToken) => {
+const verificationEmail = (permalink, verificationToken, username) => {
   const verificationLink = `${
     keys.frontEndServer
   }/verify/${permalink}/${verificationToken}`;
@@ -30,7 +30,8 @@ const verificationEmail = (permalink, verificationToken) => {
                 Confirm your email address to join ethlounge
               </p>
               <p>
-                Hello! We just need to make sure that this address belongs to you.
+                Hello ${username}!<br/>
+                We just need to make sure that this address belongs to you.
                 After verifying you will be able to log in, deposit your crypto,
                 place bets and more.
               </p>

@@ -7,6 +7,7 @@ const { plugin } = require('mongoose-auto-increment');
 const userSchema = new Schema({
   username: String,
   password: String,
+  email: String,
   balances: [
     {
       id: Number,
@@ -43,8 +44,8 @@ User.findOne({ username: initUsername }, async (err, user) => {
       balances: [
         { id: 0, balance: '2000000000' },
         { id: 1, balance: '300000000' },
-        { id: 2, balance: '1000000000000000000' },
-        { id: 3, balance: '10000000000000000000' }
+        { id: 2, balance: '10000000' },
+        { id: 3, balance: '1000000000000000000' }
       ]
     });
     initial_user.password = await initial_user.generateHash(initPassword);

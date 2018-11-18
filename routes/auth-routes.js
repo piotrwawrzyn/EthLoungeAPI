@@ -13,13 +13,13 @@ module.exports = server => {
         return next(err);
       }
       if (!user) {
-        res.send({ badUsernameOrPassword: true });
+        res.send({ invalidCredentials: true });
         return;
       }
 
       if (!user.verified)
         return res.send({
-          emailUnverified: true
+          unverifiedEmail: true
         });
 
       req.login(user, err => {
@@ -44,8 +44,8 @@ module.exports = server => {
         new_user.balances = [
           { id: 0, balance: '2000000000' },
           { id: 1, balance: '300000000' },
-          { id: 2, balance: '1000000000000000000' },
-          { id: 3, balance: '10000000000000000000' }
+          { id: 2, balance: '10000000' },
+          { id: 3, balance: '1000000000000000000' }
         ];
 
         new_user.password = await new_user.generateHash(password);
@@ -65,7 +65,11 @@ module.exports = server => {
         sendEmail(
           new_user.email,
           'Verify your email to join ethlounge',
-          verificationEmailTemplate(new_user.permalink, verificationToken)
+          verificationEmailTemplate(
+            new_user.permalink,
+            verificationToken,
+            username
+          )
         );
 
         await new_user.save();
@@ -105,6 +109,28 @@ module.exports = server => {
         res.send('This link is invalid.');
       }
     });
+  });
+
+  server.post('/resend-verification-email', (req, res) => {
+    const { username } = req.body;
+    User.findOne({ username: username }, (err, user) => {
+      if (!user) return;
+
+      if (user.verified) return;
+
+      console.log(user);
+      sendEmail(
+        user.email,
+        'Verify your email to join ethlounge',
+        verificationEmailTemplate(
+          user.permalink,
+          user.verificationToken,
+          username
+        )
+      );
+    });
+
+    res.send();
   });
 
   server.get('/logout', (req, res) => {
