@@ -105,8 +105,8 @@ module.exports = server => {
 
     user.bet = bet;
 
-    const matchInfo = { match, tokens, user };
+    const matchProps = { match, tokens, user };
 
-    res.send(matchInfo);
+    res.send(matchProps);
   });
 };

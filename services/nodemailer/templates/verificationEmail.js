@@ -26,14 +26,12 @@ const verificationEmail = (permalink, verificationToken, username) => {
           </tr>
           <tr>
             <td>
-              <p style="font-size: 30px; font-weight: 900">
+              <p style="font-size: 30px; font-weight: 900; color: #1b1c1d;">
                 Confirm your email address to join ethlounge
               </p>
-              <p>
-                Hello ${username}!<br/>
-                We just need to make sure that this address belongs to you.
-                After verifying you will be able to log in, deposit your crypto,
-                place bets and more.
+              <p style="color: #1b1c1d;">
+                Hello ${username}! 🙋‍<br/>
+                We just need to make sure that this e-mail address belongs to you. Once you click the button below, you will be automatically logged in. You can then deposit crypto and place your bets straight away. 
               </p>
             </td>
           </tr>
@@ -48,9 +46,10 @@ const verificationEmail = (permalink, verificationToken, username) => {
             </td>
           </tr>
           <tr>
+          <tr>
             <td style="padding-top: 40px">
-              <p style="font-weight: bold">Never signed up at ethlounge?</p>
-              <p>
+              <p style="font-weight: bold; color: #1b1c1d;">Never signed up at ethlounge?</p>
+              <p style="color: #1b1c1d;">
                 Don't worry, probably someone typed in your address by mistake. If
                 you ignore or delete this email, nothing further will happen.
               </p>
@@ -70,7 +69,7 @@ const verificationEmail = (permalink, verificationToken, username) => {
               <a
                 href="https://ethlounge.com"
                 style="color: #1b1c1d; text-decoration: none"
-                >ethlounge.com</a
+                >ethlounge.com | Cryptocurrency CS:GO Betting Platform</a
               >
             </td>
           </tr>
