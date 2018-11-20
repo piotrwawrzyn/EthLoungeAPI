@@ -7,6 +7,7 @@ const fillInfo = require('../../utils/fillInfo');
 module.exports = server => {
   server.get('/api/index_info', async (req, res) => {
     let matches = await Match.find({})
+      .sort({ startTime: -1 })
       .limit(20)
       .lean()
       .exec();
