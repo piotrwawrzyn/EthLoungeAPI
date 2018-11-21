@@ -34,17 +34,15 @@ const saveImage = async (image, path, filename) => {
       }
     };
 
-    const { Bucket, Key } = params.s3Params;
+    //const { Bucket, Key } = params.s3Params;
 
-    const pathToS3 = s3.getPublicUrl(Bucket, Key, 'eu-west-1');
+    //const pathToS3 = s3.getPublicUrl(Bucket, Key, 'eu-west-1');
 
     const uploader = s3Client.uploadFile(params);
 
     uploader.on('error', err => {
       console.error('Unable to upload. Error: ', err.stack);
     });
-
-    return pathToS3;
   }
 
   return '/' + relativePath;
