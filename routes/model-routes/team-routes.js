@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Team = mongoose.model('team');
 const saveImage = require('../../utils/saveImage');
 const deleteImage = require('../../utils/deleteImage');
-const IMAGE_FOLDER_PATH = 'teams';
+const IMAGE_FOLDER_PATH = 'img/teams';
 
 module.exports = server => {
   server.get('/api/teams', async (req, res) => {

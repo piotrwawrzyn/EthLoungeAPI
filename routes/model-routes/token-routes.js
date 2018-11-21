@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Token = mongoose.model('token');
 const deleteImage = require('../../utils/deleteImage');
 const saveImage = require('../../utils/saveImage');
-const IMAGE_FOLDER_PATH = 'tokens';
+const IMAGE_FOLDER_PATH = 'img/tokens';
 
 module.exports = server => {
   server.get('/api/tokens', async (req, res) => {
