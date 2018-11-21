@@ -2,6 +2,8 @@ const fs = require('fs');
 const s3Client = require('../services/s3Client');
 
 const deleteImage = async path => {
+  if (!path) return;
+
   const relativePath = path.startsWith('/') ? path.slice(1) : path;
 
   if (process.env.NODE_ENV === 'production') {
