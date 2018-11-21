@@ -7,8 +7,8 @@ const client = s3.createClient({
   multipartUploadThreshold: 20971520,
   multipartUploadSize: 15728640,
   s3Options: {
-    accessKeyId: process.env.AKIAIEWE5AOBQSPKXJ3A,
-    secretAccessKey: process.env.AOKHkv3pipcCek8LaeClnFMgO9KIjRmBc7EgVH3N
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
   }
 });
 
