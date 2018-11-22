@@ -24,7 +24,8 @@ module.exports = server => {
     if (
       !userHaveEnoughBalance(user, tokensBet) ||
       alreadyBet ||
-      usersBeingHandled.includes(betMakerID)
+      usersBeingHandled.includes(betMakerID) ||
+      tokensBet.length > 4
     ) {
       res.send(null);
     } else {

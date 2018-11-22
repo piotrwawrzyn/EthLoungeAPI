@@ -19,7 +19,8 @@ const matchSchema = new Schema({
   highestBet: { type: Number, default: 0 },
   league: Number,
   startTime: Date,
-  pandaID: String,
+  pandaID: Number,
+  numberOfGames: Number,
   serie: String
 });
 

@@ -74,7 +74,8 @@ require('./routes/user-action-routes/bet-routes')(server);
 mongoose.connect(keys.mongoDbURI);
 
 // Continous actions
-require('./continous/UpdatePrices');
+require('./continous/updatePrices');
+require('./continous/updateScheduledMatches');
 
 server.listen(port, err => {
   if (err) throw err;
