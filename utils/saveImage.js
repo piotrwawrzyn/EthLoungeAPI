@@ -18,12 +18,10 @@ const saveImage = async (image, path, filename) => {
       response.data.pipe(fs.createWriteStream(localPath)).on('finish', resolve)
     );
   } else {
-    await new Promise(resolve => {
-      image.mv(localPath, err => {
-        if (err) console.log(err);
-        else console.log('Successfuly saved file to ' + localPath);
-        resolve();
-      });
+    await image.mv(localPath, err => {
+      if (err) console.log(err);
+      else console.log('Successfuly saved file to ' + localPath);
+      resolve();
     });
   }
 
