@@ -18,7 +18,12 @@ const saveImage = async (image, path, filename) => {
       response.data.pipe(fs.createWriteStream(localPath)).on('finish', resolve)
     );
   } else {
-    await image.mv(localPath);
+    await new Promise(resolve => {
+      image.mv(localPath, err => {
+        if (err) console.log(err);
+        resolve();
+      });
+    });
   }
 
   if (process.env.NODE_ENV === 'production') {
