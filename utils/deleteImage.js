@@ -19,12 +19,19 @@ const deleteImage = async path => {
         ]
       }
     };
+    await new Promise(resolve => {
+      const deleteImage = s3Client.deleteObjects(params);
 
-    const deleteImage = s3Client.deleteObjects(params);
+      deleteImage.on('error', err => {
+        console.error('Unable to delete. Error: ', err.stack);
+        resolve();
+      });
 
-    deleteImage.on('error', err =>
-      console.error('Unable to delete. Error: ', err.stack)
-    );
+      deleteImage.on('end', () => {
+        console.log('Deleted ', relativePath);
+        resolve();
+      });
+    });
   }
 
   // Delete locally

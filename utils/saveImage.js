@@ -4,6 +4,7 @@ const s3Client = require('../services/s3Client');
 
 const saveImage = async (image, path, filename) => {
   filename = filename.replace(/[/\\?%*:|"<>]/g, '-');
+  filename = filename.replace(' ', '-');
 
   // Image will be save to something like C:\EthLoungeAPI/public/img.../filename.png and to an S3 bucket under this path
 
@@ -31,11 +32,18 @@ const saveImage = async (image, path, filename) => {
         Key: relativePath
       }
     };
+    await new Promise(resolve => {
+      const uploader = s3Client.uploadFile(params);
 
-    const uploader = s3Client.uploadFile(params);
+      uploader.on('error', err => {
+        console.error('Unable to upload. Error: ', err.stack);
+        resolve();
+      });
 
-    uploader.on('error', err => {
-      console.error('Unable to upload. Error: ', err.stack);
+      uploader.on('end', () => {
+        console.log('Done uploading ' + relativePath);
+        resolve();
+      });
     });
   }
 

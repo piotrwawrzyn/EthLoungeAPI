@@ -28,7 +28,7 @@ const verificationEmail = (permalink, verificationToken, username) => {
               Confirm your email address to join ethlounge
             </p>
             <p style="color: #1b1c1d;">
-              Hello ${username}! 🙋‍<br />
+              Hello <strong>${username}</strong>!<br />
               We just need to make sure that this e-mail address belongs to you.
               Once you click the button below, you will be automatically logged
               in. You can then deposit crypto and place your bets straight away.

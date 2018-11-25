@@ -44,8 +44,13 @@ module.exports = server => {
     let logo = req.files ? req.files.logo : null;
     const { displayName, symbol, id, decimals } = req.body;
 
+    console.log('1.', displayName, symbol, id, decimals);
+
     Token.findById({ _id: id }, async (err, token) => {
       if (err) res.send(err);
+
+      console.log('2.', token);
+
       token.displayName = displayName ? displayName : token.displayName;
       token.symbol = symbol ? symbol : token.symbol;
       token.decimals = decimals ? decimals : token.decimals;
