@@ -21,7 +21,6 @@ const saveImage = async (image, path, filename) => {
     await image.mv(localPath, err => {
       if (err) console.log(err);
       else console.log('Successfuly saved file to ' + localPath);
-      resolve();
     });
   }
 
