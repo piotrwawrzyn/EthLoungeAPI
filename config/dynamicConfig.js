@@ -1,6 +1,6 @@
 module.exports = {
   pandaAPI: {
-    automaticRescheduling: true,
+    automaticGameRescheduling: true,
     automaticGameFinalizing: false
   }
 };

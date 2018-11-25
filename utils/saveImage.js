@@ -1,8 +1,6 @@
 const axios = require('axios');
 const fs = require('fs');
-const deleteImage = require('./deleteImage');
 const s3Client = require('../services/s3Client');
-const s3 = require('s3');
 
 const saveImage = async (image, path, filename) => {
   filename = filename.replace(/[/\\?%*:|"<>]/g, '-');
@@ -33,10 +31,6 @@ const saveImage = async (image, path, filename) => {
         Key: relativePath
       }
     };
-
-    //const { Bucket, Key } = params.s3Params;
-
-    //const pathToS3 = s3.getPublicUrl(Bucket, Key, 'eu-west-1');
 
     const uploader = s3Client.uploadFile(params);
 

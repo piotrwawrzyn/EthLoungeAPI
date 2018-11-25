@@ -24,12 +24,16 @@ module.exports = server => {
           address,
           decimals
         }).save();
+
         const { _id } = new_token;
-        const logo = await saveImage(
+
+        new_token.logo = await saveImage(
           logo,
           IMAGE_FOLDER_PATH,
           `${_id}_${displayName}`
         );
+
+        new_token.save();
       }
 
       res.send({ token: new_token });
@@ -37,7 +41,7 @@ module.exports = server => {
   });
 
   server.post('/backend/update_token', (req, res) => {
-    let logo = req.files ? req.files.logo : '';
+    let logo = req.files ? req.files.logo : null;
     const { displayName, symbol, id, decimals } = req.body;
 
     Token.findById({ _id: id }, async (err, token) => {
@@ -46,7 +50,7 @@ module.exports = server => {
       token.symbol = symbol ? symbol : token.symbol;
       token.decimals = decimals ? decimals : token.decimals;
 
-      if (logo) {
+      if (logo !== null) {
         await deleteImage(token.logo);
         token.logo = await saveImage(
           logo,

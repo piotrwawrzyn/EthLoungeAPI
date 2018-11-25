@@ -44,14 +44,14 @@ module.exports = server => {
   });
 
   server.post('/backend/update_team', (req, res) => {
-    let logo = req.files ? req.files.logo : '';
+    let logo = req.files ? req.files.logo : null;
     const { displayName, id } = req.body;
 
     Team.findById({ _id: id }, async (err, team) => {
       if (err) res.send(err);
       team.displayName = displayName ? displayName : team.displayName;
 
-      if (logo) {
+      if (logo !== null) {
         await deleteImage(team.logo);
         team.logo = await saveImage(
           logo,

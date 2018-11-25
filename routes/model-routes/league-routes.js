@@ -45,14 +45,14 @@ module.exports = server => {
   });
 
   server.post('/backend/update_league', (req, res) => {
-    let logo = req.files ? req.files.logo : '';
+    let logo = req.files ? req.files.logo : null;
     const { displayName, id, pandaID } = req.body;
 
     League.findById({ _id: id }, async (err, league) => {
       if (err) res.send(err);
 
       league.displayName = displayName ? displayName : league.displayName;
-      if (logo) {
+      if (logo !== null) {
         await deleteImage(team.logo);
         league.logo = await saveImage(
           logo,

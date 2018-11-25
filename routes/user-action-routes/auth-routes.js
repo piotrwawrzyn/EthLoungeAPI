@@ -2,9 +2,9 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const User = mongoose.model('user');
 const randomstring = require('randomstring');
-const sendEmail = require('../services/nodemailer/sendEmail');
-const keys = require('../config/keys');
-const verificationEmailTemplate = require('../services/nodemailer/templates/verificationEmail');
+const sendEmail = require('../../services/nodemailer/sendEmail');
+const keys = require('../../config/keys');
+const verificationEmailTemplate = require('../../services/nodemailer/templates/verificationEmail');
 
 module.exports = server => {
   server.post('/login', (req, res, next) => {

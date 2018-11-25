@@ -57,7 +57,8 @@ server.use(passport.initialize());
 server.use(passport.session());
 
 // Routes
-require('./routes/auth-routes')(server);
+require('./routes/user-action-routes/auth-routes')(server);
+require('./routes/user-action-routes/bet-routes')(server);
 
 require('./routes/model-routes/team-routes')(server);
 require('./routes/model-routes/league-routes')(server);
@@ -69,7 +70,7 @@ require('./routes/external-api/panda-score-api')(server);
 require('./routes/page-routes/match-routes')(server);
 require('./routes/page-routes/index-routes')(server);
 
-require('./routes/user-action-routes/bet-routes')(server);
+require('./routes/page-routes/admin/index-routes')(server);
 
 mongoose.connect(keys.mongoDbURI);
 
