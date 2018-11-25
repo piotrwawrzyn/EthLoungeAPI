@@ -21,6 +21,7 @@ const saveImage = async (image, path, filename) => {
     await new Promise(resolve => {
       image.mv(localPath, err => {
         if (err) console.log(err);
+        else console.log('Successfuly saved file to ' + localPath);
         resolve();
       });
     });
@@ -37,6 +38,7 @@ const saveImage = async (image, path, filename) => {
         Key: relativePath
       }
     };
+
     await new Promise(resolve => {
       const uploader = s3Client.uploadFile(params);
 

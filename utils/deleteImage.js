@@ -23,12 +23,12 @@ const deleteImage = async path => {
       const deleteImage = s3Client.deleteObjects(params);
 
       deleteImage.on('error', err => {
-        console.error('Unable to delete. Error: ', err.stack);
+        console.error('Unable to delete file from S3. Error: ', err.stack);
         resolve();
       });
 
       deleteImage.on('end', () => {
-        console.log('Deleted ', relativePath);
+        console.log('Deleted file from S3', relativePath);
         resolve();
       });
     });
@@ -39,8 +39,8 @@ const deleteImage = async path => {
 
   await new Promise((resolve, reject) => {
     fs.unlink(localPath, err => {
-      if (err) console.log('Failed to delete img from: ' + localPath);
-      else console.log('Successfuly deleted image from: ' + localPath);
+      if (err) console.log('Failed to delete locally img from: ' + localPath);
+      else console.log('Successfuly deleted image locally from: ' + localPath);
 
       resolve();
     });
