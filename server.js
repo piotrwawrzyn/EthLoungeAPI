@@ -15,18 +15,18 @@ const port = process.env.PORT || 5000;
 const path = require('path');
 const helmet = require('helmet');
 const server = express();
-const syncDirectory = require('./utils/syncDirectory');
 
 // Setup
 autoIncrement.initialize(mongoose.connection);
 global.root = path.resolve(__dirname);
+require('./services/cloudinary');
 
 // Sync images with S3
-if (process.env.NODE_ENV === 'production') {
-  syncDirectory(`${root}/public/img/teams`, 'img/teams');
-  syncDirectory(`${root}/public/img/tokens`, 'img/tokens');
-  syncDirectory(`${root}/public/img/leagues`, 'img/leagues');
-}
+// if (process.env.NODE_ENV === 'production') {
+//   syncDirectory(`${root}/public/img/teams`, 'img/teams');
+//   syncDirectory(`${root}/public/img/tokens`, 'img/tokens');
+//   syncDirectory(`${root}/public/img/leagues`, 'img/leagues');
+// }
 
 // Models
 require('./models/User');
