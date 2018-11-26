@@ -6,7 +6,10 @@ const IMAGE_FOLDER_PATH = 'img/tokens';
 
 module.exports = server => {
   server.get('/api/tokens', async (req, res) => {
-    const tokens = await Token.find({});
+    const tokens = await Token.find({})
+      .sort({ _id: 1 })
+      .lean()
+      .exec();
     res.send(tokens);
   });
 

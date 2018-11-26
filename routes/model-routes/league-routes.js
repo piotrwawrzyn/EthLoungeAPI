@@ -18,7 +18,10 @@ module.exports = server => {
       return;
     }
 
-    const leagues = await League.find({});
+    const leagues = await League.find({})
+      .sort({ _id: 1 })
+      .lean()
+      .exec();
     res.send(leagues);
   });
 

@@ -10,6 +10,23 @@ const saveImage = async (image, path, filename) => {
 
   if (process.env.NODE_ENV === 'production') {
     // Save image to Cloudinary
+
+    const params = {
+      public_id: relativePath,
+      format: 'png'
+    };
+
+    if (typeof image === 'string') {
+      const image_data = await new Promise(resolve => {
+        cloudinary.v2.uploader.upload(image, params, (error, result) => {
+          console.log(error, result);
+          resolve(result);
+        });
+      });
+
+      return image_data.secure_url;
+    }
+
     const image_data = await new Promise(resolve =>
       cloudinary.uploader
         .upload_stream(result => resolve(result), {
