@@ -8,22 +8,22 @@ module.exports = server => {
   });
 
   server.post(
-    '/backend/update-config/pandascoreapi/automatic-game-rescheduling',
+    '/backend/update-config/pandascoreapi/automatic-match-rescheduling',
     (req, res) => {
       const { newValue } = req.body.data;
 
-      dynamicConfig.pandaAPI.automaticGameRescheduling = newValue;
+      dynamicConfig.pandaAPI.automaticMatchRescheduling = newValue;
 
       res.send();
     }
   );
 
   server.post(
-    '/backend/update-config/pandascoreapi/automatic-game-finalizing',
+    '/backend/update-config/pandascoreapi/automatic-match-finalizing',
     (req, res) => {
       const { newValue } = req.body.data;
 
-      dynamicConfig.pandaAPI.automaticGameFinalizing = newValue;
+      dynamicConfig.pandaAPI.automaticMatchFinalizing = newValue;
 
       res.send();
     }

@@ -11,11 +11,11 @@ const CalculateOdds = totalDollarsBet => {
 
       switch (percentage) {
         case 100: {
-          return 100 * FEE_MULTIPLIER;
+          return 1 * FEE_MULTIPLIER;
         }
 
         case 0: {
-          return 1;
+          return 100 * FEE_MULTIPLIER;
         }
 
         default: {

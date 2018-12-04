@@ -1,5 +1,13 @@
 const _ = require('lodash');
 
+const isArrayOfIds = items => {
+  for (let i = 0; i < items.length; i++) {
+    if (typeof items[i] !== 'number') return false;
+  }
+
+  return true;
+};
+
 const fillInfo = (items, itemsFromDb) => {
   if (typeof items === 'number') {
     const itemFromDb = _.find(itemsFromDb, { _id: items });
@@ -14,10 +22,15 @@ const fillInfo = (items, itemsFromDb) => {
     return filledItem;
   }
 
-  items = items.map(item => {
-    const itemFromDb = _.find(itemsFromDb, { _id: item.id });
+  let id;
 
-    return { ...item, ...itemFromDb, _id: undefined };
+  items = items.map(item => {
+    if (isArrayOfIds(items)) id = item;
+    else id = item.id;
+
+    const itemFromDb = _.find(itemsFromDb, { _id: id });
+
+    return { ...item, ...itemFromDb, id, _id: undefined };
   });
 
   return items;

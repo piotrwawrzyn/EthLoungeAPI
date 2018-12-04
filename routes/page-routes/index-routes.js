@@ -3,23 +3,28 @@ const Match = mongoose.model('match');
 const Team = mongoose.model('team');
 const League = mongoose.model('league');
 const fillInfo = require('../../utils/fillInfo');
+const { MATCHES_PER_PAGE } = require('../../config/constants');
+const sortMatches = require('../../helpers/match/sortMatches');
 
 module.exports = server => {
   server.get('/api/index_info', async (req, res) => {
+    const page = isNaN(req.query.page) ? 1 : req.query.page;
+
     let matches = await Match.find({})
       .sort({ startTime: -1 })
-      .limit(30)
+      .limit(page * 50)
       .lean()
       .exec();
 
+    // Validate if page "exists"
+    if (matches.length < (page - 1) * MATCHES_PER_PAGE + 1) {
+      res.send({ matches: [] });
+      return;
+    }
+
+    matches = sortMatches(matches, page);
+
     // SORT FOR: CLOSEST, UPCOMING, PAST
-
-    const now = new Date();
-
-    let future = matches.filter(match => match.startTime >= now);
-    future = future.reverse();
-    let past = matches.filter(match => match.startTime < now);
-    matches = [...future, ...past];
 
     const teams = await Team.find({})
       .lean()

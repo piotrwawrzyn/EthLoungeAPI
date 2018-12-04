@@ -21,7 +21,8 @@ const betSchema = new Schema({
       _id: false
     }
   ],
-  state: { type: String, default: 'pending' }
+  state: { type: String, default: 'pending' },
+  displayedToUser: Boolean
 });
 
 betSchema.plugin(plugin, 'bet');

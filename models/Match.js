@@ -21,7 +21,8 @@ const matchSchema = new Schema({
   startTime: Date,
   pandaID: Number,
   numberOfGames: Number,
-  serie: String
+  serie: String,
+  winnerID: Number
 });
 
 matchSchema.plugin(plugin, 'match');

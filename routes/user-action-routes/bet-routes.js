@@ -9,6 +9,7 @@ const updateMatchWithBet = require('../../utils/bet/updateMatchWithBet');
 const estimateBetValue = require('../../utils/bet/estimateBetValue');
 const PricesMap = require('../../utils/pricesMap');
 const removeEmptyBalances = require('../../utils/removeEmptyBalances');
+const updateMatchData = require('../../helpers/match/updateMatchData');
 const _ = require('lodash');
 
 let usersBeingHandled = [];
@@ -52,15 +53,32 @@ module.exports = server => {
       }).save();
 
       await updateMatchWithBet(matchID, bet, supportedTokens, pricesMap);
+
       await removeEmptyBalances(user);
 
       user.bets.push(bet._id);
       await user.save();
+
+      await updateMatchData(matchID, supportedTokens, pricesMap);
 
       res.send({ bet });
 
       // Unlock route for user
       usersBeingHandled = _.pull(usersBeingHandled, betMakerID);
     }
+  });
+
+  server.post('/set_displayed_bet', (req, res) => {
+    const betID = req.body.betID;
+
+    Bet.findById(betID, async (err, bet) => {
+      if (err) return;
+      if (!bet) return;
+
+      bet.displayedToUser = true;
+      await bet.save();
+    });
+
+    res.send();
   });
 };

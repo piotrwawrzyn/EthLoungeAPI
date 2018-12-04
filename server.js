@@ -21,13 +21,6 @@ autoIncrement.initialize(mongoose.connection);
 global.root = path.resolve(__dirname);
 require('./services/cloudinary');
 
-// Sync images with S3
-// if (process.env.NODE_ENV === 'production') {
-//   syncDirectory(`${root}/public/img/teams`, 'img/teams');
-//   syncDirectory(`${root}/public/img/tokens`, 'img/tokens');
-//   syncDirectory(`${root}/public/img/leagues`, 'img/leagues');
-// }
-
 // Models
 require('./models/User');
 require('./models/Team');

@@ -1,10 +1,12 @@
 const passport = require('passport');
 const mongoose = require('mongoose');
 const User = mongoose.model('user');
+const Token = mongoose.model('token');
 const randomstring = require('randomstring');
 const sendEmail = require('../../services/nodemailer/sendEmail');
 const keys = require('../../config/keys');
 const verificationEmailTemplate = require('../../services/nodemailer/templates/verificationEmail');
+const _ = require('lodash');
 
 module.exports = server => {
   server.post('/login', (req, res, next) => {
@@ -41,11 +43,21 @@ module.exports = server => {
         });
 
         // Apply testing balances
+        const tokens = await Token.find({})
+          .lean()
+          .exec();
+        const OMG_ID = _.find(tokens, { symbol: 'OMG' })._id;
+        const POWR_ID = _.find(tokens, { symbol: 'POWR' })._id;
+        const MTL_ID = _.find(tokens, { symbol: 'MTL' })._id;
+        const ETH_ID = _.find(tokens, { symbol: 'ETH' })._id;
+        const BAT_ID = _.find(tokens, { symbol: 'BAT' })._id;
+
         new_user.balances = [
-          { id: 0, balance: '2000000000' },
-          { id: 1, balance: '300000000' },
-          { id: 2, balance: '10000000' },
-          { id: 3, balance: '100000000' }
+          { id: OMG_ID, balance: '250000000000000000000' },
+          { id: POWR_ID, balance: '500000000' },
+          { id: MTL_ID, balance: '50000000000' },
+          { id: ETH_ID, balance: '1500000000000000000' },
+          { id: BAT_ID, balance: '1000000000000000000000' }
         ];
 
         new_user.password = await new_user.generateHash(password);

@@ -9,7 +9,8 @@ const tokenSchema = new Schema({
   decimals: Number,
   logo: String,
   price: {
-    USD: String
+    USD: String,
+    ETH: String
   }
 });
 
@@ -53,5 +54,12 @@ addInitialSupportedToken(
   'Basic Attention Token',
   'BAT',
   '0x9f0C267ef144D319CcF1d724c222a59A50CD7B43',
+  18
+);
+
+addInitialSupportedToken(
+  'OmiseGO',
+  'OMG',
+  '0x3f0C267ef144D319CcF1d724c222a59A50CD7B43',
   18
 );

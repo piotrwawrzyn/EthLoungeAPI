@@ -87,6 +87,7 @@ module.exports = server => {
           bet = all_bets_by_user[i];
           bet.tokensBet = fillInfo(bet.tokensBet, tokens);
           bet.team = fillInfo(bet.teamID, teams);
+          bet.tokensWon = fillInfo(bet.tokensWon, tokens);
           break;
         }
       }

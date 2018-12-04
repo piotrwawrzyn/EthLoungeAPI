@@ -9,6 +9,7 @@ updatePrices = async () => {
 
   for (token of supportedTokens) {
     token.price.USD = pricesMap.get(token.symbol).USD;
+    token.price.ETH = pricesMap.get(token.symbol).ETH;
     await token.save();
   }
 

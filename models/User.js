@@ -39,7 +39,7 @@ User.findOne({ username: initUsername }, async (err, user) => {
   if (!user) {
     const initial_user = new User({
       username: initUsername,
-      permissions: ['admin'],
+      permissions: ['admin', 'houseedge'],
       verified: true,
       balances: [
         { id: 0, balance: '2000000000' },
