@@ -62,6 +62,7 @@ module.exports = server => {
 
         new_user.password = await new_user.generateHash(password);
         new_user.email = email;
+        new_user.signupDate = new Date();
 
         const permalink = username
           .toLowerCase()

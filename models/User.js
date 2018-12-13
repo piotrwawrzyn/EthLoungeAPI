@@ -19,7 +19,8 @@ const userSchema = new Schema({
   permissions: [String],
   permalink: String,
   verificationToken: String,
-  verified: { type: Boolean, default: false }
+  verified: { type: Boolean, default: false },
+  signupDate: Date
 });
 
 userSchema.methods.generateHash = password => {

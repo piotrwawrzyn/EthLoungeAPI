@@ -57,6 +57,7 @@ require('./routes/model-routes/team-routes')(server);
 require('./routes/model-routes/league-routes')(server);
 require('./routes/model-routes/match-routes')(server);
 require('./routes/model-routes/token-routes')(server);
+require('./routes/model-routes/user-routes')(server);
 
 require('./routes/external-api/panda-score-api')(server);
 
@@ -64,6 +65,7 @@ require('./routes/page-routes/match-routes')(server);
 require('./routes/page-routes/index-routes')(server);
 
 require('./routes/page-routes/admin/index-routes')(server);
+require('./routes/page-routes/admin/users-routes')(server);
 
 mongoose.connect(keys.mongoDbURI);
 

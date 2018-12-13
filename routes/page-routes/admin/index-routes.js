@@ -1,10 +1,13 @@
 const dynamicConfig = require('../../../config/dynamicConfig');
+const getStats = require('../../../utils/getServerStats');
 
 module.exports = server => {
   server.get('/api/admin/index_info', (req, res) => {
     const { pandaAPI } = dynamicConfig;
 
-    res.send({ pandaAPI });
+    const serverStats = getStats();
+
+    res.send({ pandaAPI, serverStats });
   });
 
   server.post(

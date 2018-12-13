@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const Big = require('big.js');
-const tokenFromWei = require('../tokenFromWei');
+const tokenFromWei = require('../../utils/tokenFromWei');
 
 const EstimateBetValue = (tokensBet, supportedTokens, pricesMap) => {
   let estimatedBetValue = Big(0);

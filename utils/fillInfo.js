@@ -15,7 +15,7 @@ const fillInfo = (items, itemsFromDb) => {
     return itemFromDb;
   }
 
-  if (!items.length) {
+  if (typeof items.length !== 'number') {
     // Not an array
 
     const filledItem = { ...items, ...itemsFromDb, _id: undefined };

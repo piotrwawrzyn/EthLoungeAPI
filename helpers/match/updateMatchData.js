@@ -5,8 +5,8 @@ const Token = mongoose.model('token');
 const _ = require('lodash');
 const Big = require('big.js');
 const tokenFromWei = require('../../utils/tokenFromWei');
-const calculatePercentages = require('../../utils/bet/calculatePercentages');
-const calculateOdds = require('../../utils/bet/calculateOdds');
+const calculatePercentages = require('../bet/calculatePercentages');
+const calculateOdds = require('../bet/calculateOdds');
 const PricesMap = require('../../utils/pricesMap');
 
 module.exports = async (matchID, supportedTokens, pricesMap) => {
