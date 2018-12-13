@@ -169,6 +169,9 @@ asignBucketsToHouseEdge = async buckets => {
     permissions: { $in: ['houseedge'] }
   }).exec();
 
+  // Protection from unwated exceptions
+  if (!houseEdgeUser) return;
+
   buckets = buckets.filter(bucket => bucket.amount.cmp(0) > 0);
 
   for (bucket of buckets) {
