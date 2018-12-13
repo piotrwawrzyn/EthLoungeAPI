@@ -91,12 +91,13 @@ const updateTokensWon = (tokensWon, tokenDrawn) => {
   return tokensWon;
 };
 
-const saveWinningsToDatabase = async (bet, tokensWon) => {
+const saveWinningsToDatabase = async (bet, tokensWon, logs) => {
   // Warning: tokensWon contains amount in BigDecimal format
 
   tokensWon = tokensWon.filter(token => token.amount.cmp(0) > 0);
 
   const gambler = await User.findById(bet.betMakerID).exec();
+
   const { balances } = gambler;
 
   for (token of tokensWon) {
@@ -113,6 +114,7 @@ const saveWinningsToDatabase = async (bet, tokensWon) => {
   }
 
   bet.tokensWon = tokensWon;
+  bet.logs = logs;
 
   await bet.save();
   gambler.markModified('balances');
@@ -188,7 +190,9 @@ asignBucketsToHouseEdge = async buckets => {
 };
 
 const log = message => {
-  console.log(`[MATCH_DRAWING_ALGORITHM] ${message}`);
+  const log = `[MATCH_DRAWING_ALGORITHM] ${message}`;
+  console.log(log);
+  return log;
 };
 
 const finalizeMatch = async (match, winningTeam) => {
@@ -229,6 +233,7 @@ const finalizeMatch = async (match, winningTeam) => {
   log(`Total bet winning team: ${totalEthBetWinningTeam.toFixed()}`);
 
   p: for (bet of winningBets) {
+    let logs = [];
     let ethDue = calculateEthDue(
       bet,
       totalEthBetLosingTeam,
@@ -236,10 +241,12 @@ const finalizeMatch = async (match, winningTeam) => {
       allTokens
     );
 
-    log(
-      `---------- Rewarding user ${
-        bet.betMakerID
-      } with ${ethDue.toFixed()} ETH ----------`
+    logs.push(
+      log(
+        `---------- Rewarding user ${
+          bet.betMakerID
+        } with ${ethDue.toFixed()} ETH ----------`
+      )
     );
 
     let tokensWon = [];
@@ -247,7 +254,7 @@ const finalizeMatch = async (match, winningTeam) => {
     while (ethDue.cmp(0) === 1) {
       if (losingBetsBuckets.length === 0) {
         //Prevent infinite loop in extreme cases
-        log('INFINITE LOOP PREVENTION 1 TRIGGERED');
+        logs.push(log('INFINITE LOOP PREVENTION 1 TRIGGERED'));
         break p;
       }
 
@@ -261,10 +268,12 @@ const finalizeMatch = async (match, winningTeam) => {
       if (ethDue.cmp(bucket.ethValue) >= 0) {
         tokenAmountToSupply = bucket.amount.round(0, 0);
         ethValueToSupply = bucket.ethValue;
-        log(
-          `Bucket value <= ethDue --> Supplying with ${ethValueToSupply.toFixed()} ETH of token ${
-            bucket.id
-          } (${bucket.amount})`
+        logs.push(
+          log(
+            `Bucket value <= ethDue --> Supplying with ${ethValueToSupply.toFixed()} ETH of token ${
+              bucket.id
+            } (${bucket.amount})`
+          )
         );
       } else {
         // Bucket value > ethDue
@@ -281,10 +290,12 @@ const finalizeMatch = async (match, winningTeam) => {
               .round(0, 0);
 
             ethValueToSupply = ethDue;
-            log(
-              `Bucket value > ethDue --> 1/4 Drawn, Supplying with ${ethValueToSupply.toFixed()} ETH of token ${
-                bucket.id
-              } (${tokenAmountToSupply.round(0, 0).toFixed()})`
+            logs.push(
+              log(
+                `Bucket value > ethDue --> 1/4 Drawn, Supplying with ${ethValueToSupply.toFixed()} ETH of token ${
+                  bucket.id
+                } (${tokenAmountToSupply.round(0, 0).toFixed()})`
+              )
             );
             break;
           }
@@ -298,10 +309,12 @@ const finalizeMatch = async (match, winningTeam) => {
               .mul(bucket.amount)
               .round(0, 0);
 
-            log(
-              `Bucket value > ethDue: 3/4 Drawn, Supplying with ${ethValueToSupply.toFixed()} ETH of token ${
-                bucket.id
-              } (${tokenAmountToSupply})`
+            logs.push(
+              log(
+                `Bucket value > ethDue: 3/4 Drawn, Supplying with ${ethValueToSupply.toFixed()} ETH of token ${
+                  bucket.id
+                } (${tokenAmountToSupply})`
+              )
             );
             break;
           }
@@ -325,9 +338,8 @@ const finalizeMatch = async (match, winningTeam) => {
       if (bucket.ethValue.cmp(0) < 1)
         _.remove(losingBetsBuckets, { id: bucket.id });
     }
-
-    await saveWinningsToDatabase(bet, tokensWon);
-    log(`Finished rewarding user ${bet.betMakerID}`);
+    logs.push(log(`Finished rewarding user ${bet.betMakerID}`));
+    await saveWinningsToDatabase(bet, tokensWon, logs);
   }
 
   await cleanTheDust(losingBetsBuckets);
