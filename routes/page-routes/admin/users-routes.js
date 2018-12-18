@@ -31,11 +31,32 @@ module.exports = server => {
       .lean()
       .exec();
 
+    const matchIDs = bets.map(bet => bet.matchID);
+
+    const matches = await Match.find({ _id: { $in: matchIDs } })
+      .lean()
+      .exec();
+    const teams = await Team.find({})
+      .lean()
+      .exec();
+    const leagues = await League.find({})
+      .lean()
+      .exec();
+
+    let userBets = fillInfo(user.bets, bets);
+
+    userBets = userBets.map(bet => {
+      bet.match = fillInfo(bet.matchID, matches);
+      bet.match.teams = fillInfo(bet.match.teams, teams);
+      bet.match.league = fillInfo(bet.match.league, leagues);
+      return bet;
+    });
+
     const userInDb = {
       username: user.username,
       email: user.email,
       signupDate: user.signupDate,
-      bets: fillInfo(user.bets, bets),
+      bets: userBets,
       balances: fillInfo(user.balances, tokens)
     };
 
