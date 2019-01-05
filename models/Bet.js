@@ -7,6 +7,7 @@ const betSchema = new Schema({
   teamID: Number,
   betMakerID: Number,
   estimatedBetValue: Number,
+  winningsValue: Number,
   tokensBet: [
     {
       id: Number,

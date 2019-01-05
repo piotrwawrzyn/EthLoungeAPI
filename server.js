@@ -63,6 +63,7 @@ require('./routes/external-api/panda-score-api')(server);
 
 require('./routes/page-routes/match-routes')(server);
 require('./routes/page-routes/index-routes')(server);
+require('./routes/page-routes/my-bets-routes')(server);
 
 require('./routes/page-routes/admin/index-routes')(server);
 require('./routes/page-routes/admin/users-routes')(server);

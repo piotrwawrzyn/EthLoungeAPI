@@ -6,6 +6,7 @@ const Bet = mongoose.model('bet');
 const Big = require('big.js');
 const _ = require('lodash');
 const constants = require('../../config/constants');
+const tokenFromWei = require('../../utils/tokenFromWei');
 
 const markBets = async match => {
   let bets = await Bet.find({ matchID: match._id }).exec();
@@ -91,7 +92,7 @@ const updateTokensWon = (tokensWon, tokenDrawn) => {
   return tokensWon;
 };
 
-const saveWinningsToDatabase = async (bet, tokensWon, logs) => {
+const saveWinningsToDatabase = async (bet, tokensWon, logs, allTokens) => {
   // Warning: tokensWon contains amount in BigDecimal format
 
   tokensWon = tokensWon.filter(token => token.amount.cmp(0) > 0);
@@ -100,8 +101,18 @@ const saveWinningsToDatabase = async (bet, tokensWon, logs) => {
 
   const { balances } = gambler;
 
+  let winningsValue = new Big(0);
+
   for (token of tokensWon) {
     let { id, amount } = token;
+
+    const tokenInDb = _.find(allTokens, { _id: id });
+    const price = tokenInDb.price.USD;
+    const decimals = tokenInDb.decimals;
+
+    winningsValue = winningsValue.plus(
+      tokenFromWei(amount, decimals).mul(price)
+    );
 
     let userBalance = _.find(balances, { id });
 
@@ -115,6 +126,7 @@ const saveWinningsToDatabase = async (bet, tokensWon, logs) => {
 
   bet.tokensWon = tokensWon;
   bet.logs = logs;
+  bet.winningsValue = winningsValue.toFixed(3);
 
   await bet.save();
   gambler.markModified('balances');
@@ -342,7 +354,7 @@ const finalizeMatch = async (match, winningTeam) => {
         _.remove(losingBetsBuckets, { id: bucket.id });
     }
     logs.push(log(`Finished rewarding user ${bet.betMakerID}`));
-    await saveWinningsToDatabase(bet, tokensWon, logs);
+    await saveWinningsToDatabase(bet, tokensWon, logs, allTokens);
   }
 
   await cleanTheDust(losingBetsBuckets);
