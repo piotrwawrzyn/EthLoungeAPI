@@ -12,7 +12,7 @@
   "license": "ISC",
   "description": "EthLounge API",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "bcryptjs": "^2.4.3",
     "big.js": "^5.2.2",
     "circular-json": "^0.5.9",
