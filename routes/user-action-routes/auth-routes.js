@@ -43,9 +43,7 @@ module.exports = server => {
         });
 
         // Apply testing balances
-        const tokens = await Token.find({})
-          .lean()
-          .exec();
+        const tokens = await Token.find({}).lean().exec();
         const OMG_ID = _.find(tokens, { symbol: 'OMG' })._id;
         const POWR_ID = _.find(tokens, { symbol: 'POWR' })._id;
         const MTL_ID = _.find(tokens, { symbol: 'MTL' })._id;

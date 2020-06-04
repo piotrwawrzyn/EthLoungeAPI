@@ -28,7 +28,7 @@ module.exports = server => {
       usersBeingHandled.includes(betMakerID) ||
       tokensBet.length > 4
     ) {
-      res.send(null);
+      res.send(400);
     } else {
       // Lock route for user to prevent double-betting
       usersBeingHandled.push(betMakerID);

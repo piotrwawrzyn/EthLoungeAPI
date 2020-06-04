@@ -11,22 +11,18 @@ const updateMatchData = require('../helpers/match/updateMatchData');
 
 const log = () => {
   console.log(
-    `[PANDASCORE] UPDATING SCHEDULED MATCHES. AUTOMATIC_RESCHEDULING[${
-      pandaAPI.automaticMatchRescheduling
-    }], AUTOMATIC_FINALIZING[${pandaAPI.automaticMatchFinalizing}]`
+    `[PANDASCORE] UPDATING SCHEDULED MATCHES. AUTOMATIC_RESCHEDULING[${pandaAPI.automaticMatchRescheduling}], AUTOMATIC_FINALIZING[${pandaAPI.automaticMatchFinalizing}]`
   );
 };
 
-updateScheduledMatches = async () => {
+const updateScheduledMatches = async () => {
   log();
   let matchesDb = await Match.find({ state: 'scheduled' }).exec();
 
   if (matchesDb.length !== 0) {
     const matchesIds = matchesDb.map(match => match.pandaID);
 
-    const api_link = `https://api.pandascore.co/csgo/matches?token=${
-      keys.panda_score_api_key
-    }&filter[id]=${matchesIds}`;
+    const api_link = `https://api.pandascore.co/csgo/matches?token=${keys.panda_score_api_key}&filter[id]=${matchesIds}`;
 
     const response = await axios(api_link);
     const matchesInApi = response.data;
@@ -44,9 +40,7 @@ updateScheduledMatches = async () => {
 
         if (dateInDb.getTime() !== dateInApi.getTime()) {
           console.log(
-            `Changing start time for match ${
-              dbCounterpart._id
-            }. Rescheduling from ${dateInDb} to ${dateInApi}.`
+            `Changing start time for match ${dbCounterpart._id}. Rescheduling from ${dateInDb} to ${dateInApi}.`
           );
           dbCounterpart.startTime = dateInApi;
           await dbCounterpart.save();

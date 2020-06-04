@@ -34,6 +34,8 @@
     "passport-local": "^1.0.0",
     "randomstring": "^1.1.5",
     "s3": "^4.4.0",
-    "web3": "^1.0.0-beta2"
+    "solc": "^0.6.8",
+    "truffle-hdwallet-provider": "^1.0.17",
+    "web3": "^1.2.7"
   }
 }
